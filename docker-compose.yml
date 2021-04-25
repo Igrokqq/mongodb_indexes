@@ -1,0 +1,15 @@
+
+version: "3"
+services:
+  mongodb:
+    container_name: my_mongodb
+    image: mongo:4.4
+    restart: always
+    volumes:
+      - 'my_mongodb_data:/data/db:z'
+    ports:
+      - 27017:27017
+
+volumes:
+  my_mongodb_data:
+    external: true
