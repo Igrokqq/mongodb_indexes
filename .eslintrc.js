@@ -43,7 +43,7 @@ module.exports = {
         "ts": "never",
       }
    ],
-   "indent": [2, "tab"],
+   "indent": [2],
    "no-tabs": 0,
    "func-names": "off"
   },
