@@ -120,7 +120,9 @@ async function consoleQueryLookupSpeed({
 
 async function main(): Promise<void> {
   const mongoConnection: MongooseConnection = await mongoConnectionPromise;
-  const books1Collection: Collection = mongoConnection.db.collection(DatabaseConstants.FIRST_BOOKS_COLLECTION);
+  const books1Collection: Collection = mongoConnection.db.collection(
+    DatabaseConstants.FIRST_BOOKS_COLLECTION,
+  );
   const BookModel: Model<BookEntity> = getBookModel(mongoConnection);
   const limit = 20000;
 
