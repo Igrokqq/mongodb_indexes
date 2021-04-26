@@ -8,8 +8,8 @@ type Book = {
 	readonly publishedAt: Date;
 	readonly language: string;
 	readonly pagesCount: number;
-	readonly weight: number;
-	readonly format: string;
+  readonly weight: number;
+  readonly format: string;
 };
 
 export default Book;
