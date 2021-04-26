@@ -124,7 +124,7 @@ async function main(): Promise<void> {
     DatabaseConstants.FIRST_BOOKS_COLLECTION,
   );
   const BookModel: Model<BookEntity> = getBookModel(mongoConnection);
-  const limit = 20000;
+  const limit = 1000;
 
   ConsoleLogger.log('Don\'t worry, all works, you need to wait until this benchmark will finish');
 

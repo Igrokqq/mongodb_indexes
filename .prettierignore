@@ -1,0 +1,15 @@
+.idea/
+.DS_Store
+.vscode/
+node_modules/
+.git
+build/
+./docker-compose.yml
+.env
+.git
+package-lock.json
+package.json
+.eslintignore
+.gitignore
+.prettierignore
+.gitignore

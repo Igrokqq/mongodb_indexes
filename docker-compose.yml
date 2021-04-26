@@ -1,7 +1,21 @@
-
-version: "3"
+version: '3'
 services:
-  mongodb:
+  app:
+    container_name: app
+    image: node:14
+    command: bash -c "npm i && sleep infinity"
+    working_dir: /var/www/app
+    restart: always
+    volumes:
+      - ./:/var/www/app:cached
+      - /var/www/app/node_modules
+    env_file:
+      - .env.example
+    ports:
+      - 3000:3000
+    links:
+      - my_mongodb
+  my_mongodb:
     container_name: my_mongodb
     image: mongo:4.4
     restart: always

@@ -21,7 +21,7 @@ docker-compose up -d
 ---
 
 ```
-npm run db:seed
+docker exec -it app npm run db:seed
 ```
 
 ### Check queries without specific indexes
@@ -29,7 +29,7 @@ npm run db:seed
 ---
 
 ```
-npm run benchmark
+docker exec -it app npm run benchmark
 ```
 
 ### Add specific indexes to speed up our queries
@@ -37,7 +37,7 @@ npm run benchmark
 ---
 
 ```
-npm run db:indexes:init
+docker exec -it app npm run db:indexes:init
 ```
 
 ### Check queries with specific indexes
@@ -45,5 +45,5 @@ npm run db:indexes:init
 ---
 
 ```
-npm run benchmark
+docker exec -it app npm run benchmark
 ```
