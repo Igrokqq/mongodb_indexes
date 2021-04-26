@@ -12,7 +12,7 @@ function MongoConnection(
 ) {
   const _connect = async function (uri: string, options: ConnectOptions): Promise<Connection> {
     const connection: Connection = await createConnection(uri, options);
-    connection.on('connected', () => ConsoleLogger.log(`Connected to ${uri}`));
+    ConsoleLogger.log(`Connected to ${uri}`);
     connection.on('connecting', () => ConsoleLogger.log(`Trying to connect to ${uri}`));
     connection.on('disconnected', () => ConsoleLogger.error(`Disconnected from ${uri}`));
     connection.on('disconnecting', () => ConsoleLogger.error(`Disconnecting from ${uri}`));
@@ -31,12 +31,6 @@ function MongoConnection(
 }
 
 export default new (MongoConnection as any)(process.env.MONGODB_URL || '', {
-  // automatically try to reconnect when it loses connection
-  autoReconnect: true,
-  // reconnect every reconnectInterval milliseconds
-  // for reconnectTries times
-  reconnectTries: Number.MAX_VALUE,
-  reconnectInterval: 1000,
   // flag to allow users to fall back to the old
   // parser if they find a bug in the new parse
   useNewUrlParser: true,

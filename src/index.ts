@@ -3,6 +3,7 @@ import { Collection } from 'mongodb';
 import mongoConnectionPromise from './database/mongo.connection';
 import { getModel as getBookModel, BookEntity } from './components/book/book.model';
 import ConsoleLogger from './console.logger';
+import * as DatabaseConstants from './database/constants';
 
 async function consoleQuerySpeedWithoutLean(model: Model<any>, limit: number): Promise<void> {
   ConsoleLogger.time('without lean');
@@ -92,9 +93,34 @@ async function consoleQuerySearchInAuthors(
   ConsoleLogger.timeEnd(consoleTimeId);
 }
 
+async function consoleQueryLookupSpeed({
+  collection,
+  lookupOptions,
+  limit,
+}: {
+  collection: Collection,
+  lookupOptions: LookupOptions,
+  limit: number,
+}):Promise<void> {
+  const consoleTimeId = 'lookup';
+  ConsoleLogger.time(consoleTimeId);
+  await collection.aggregate([
+    {
+      $lookup: lookupOptions,
+    },
+    {
+      $unwind: `$${lookupOptions.as}`,
+    },
+    {
+      $limit: limit,
+    },
+  ]).toArray();
+  ConsoleLogger.timeEnd(consoleTimeId);
+}
+
 async function main(): Promise<void> {
   const mongoConnection: MongooseConnection = await mongoConnectionPromise;
-  const booksCollection: Collection = mongoConnection.db.collection('books');
+  const books1Collection: Collection = mongoConnection.db.collection(DatabaseConstants.FIRST_BOOKS_COLLECTION);
   const BookModel: Model<BookEntity> = getBookModel(mongoConnection);
   const limit = 20000;
 
@@ -113,10 +139,47 @@ async function main(): Promise<void> {
   ConsoleLogger.log('sort by language');
   await consoleQuerySortSpeed(BookModel, limit, { language: 1 });
   // CHECK WITH MULTIKEY INDEX & WITHOUT
-  await consoleQuerySearchInTags(booksCollection, limit);
-  await consoleQuerySearchInGenres(booksCollection, limit);
-  await consoleQuerySearchInAuthors(booksCollection, limit);
-
+  await consoleQuerySearchInTags(books1Collection, limit);
+  await consoleQuerySearchInGenres(books1Collection, limit);
+  await consoleQuerySearchInAuthors(books1Collection, limit);
+  // CHECK WITH LOOKUPS
+  await consoleQueryLookupSpeed({
+    collection: books1Collection,
+    lookupOptions: {
+      from: DatabaseConstants.SECOND_BOOKS_COLLECTION,
+      localField: 'title',
+      foreignField: 'title',
+      as: 'book',
+    },
+    limit,
+  });
+  await consoleQueryLookupSpeed({
+    collection: books1Collection,
+    lookupOptions: {
+      from: DatabaseConstants.SECOND_BOOKS_COLLECTION,
+      localField: 'language',
+      foreignField: 'language',
+      as: 'book',
+    },
+    limit,
+  });
+  await consoleQueryLookupSpeed({
+    collection: books1Collection,
+    lookupOptions: {
+      from: DatabaseConstants.SECOND_BOOKS_COLLECTION,
+      pipeline: [
+        {
+          $match: {
+            tags: {
+              $in: ['omnis'],
+            },
+          },
+        },
+      ],
+      as: 'book',
+    },
+    limit,
+  });
   await mongoConnection.close();
 }
 

@@ -5,6 +5,7 @@ import {
   Connection as MongooseConnection,
 } from 'mongoose';
 import Book from './types/book.type';
+import * as DatabaseConstants from '../../database/constants';
 
 export type BookEntity = Document & Book;
 
@@ -81,7 +82,7 @@ export const getModel = (connection: MongooseConnection): Model<BookEntity> => c
     },
   },
   {
-    collection: 'books',
+    collection: DatabaseConstants.FIRST_BOOKS_COLLECTION,
     versionKey: false,
     timestamps: true,
   },

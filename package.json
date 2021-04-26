@@ -1,13 +1,14 @@
 {
   "name": "mongodb_indexes",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is a benchmark which checks the difference in performance between documents with indexes & without in mongodb.",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node -r dotenv/config src/index.ts dotenv_config_path=.env",
+    "benchmark": "ts-node -r dotenv/config src/index.ts dotenv_config_path=.env",
     "dev": "nodemon",
     "db:seed": "ts-node -r dotenv/config src/database/seeds/push-books.ts dotenv_config_path=.env",
-    "db:indexes:init": "ts-node -r dotenv/config src/database/seeds/init-indexes.ts dotenv_config_path=.env"
+    "db:indexes:init": "ts-node -r dotenv/config src/database/seeds/init-indexes.ts dotenv_config_path=.env",
+    "db:indexes:dropAll": "ts-node -r dotenv/config src/database/seeds/drop-indexes.ts dotenv_config_path=.env"
   },
   "keywords": [
     "mongodb",
@@ -16,10 +17,11 @@
     "performance",
     "optimizing"
   ],
-  "author": "",
+  "author": "wimmmly",
   "license": "MIT",
   "devDependencies": {
     "@types/faker": "5.5.3",
+    "@types/mongodb": "3.6.12",
     "@types/mongoose": "5.10.5",
     "@typescript-eslint/eslint-plugin": "2.23.0",
     "@typescript-eslint/parser": "2.23.0",
